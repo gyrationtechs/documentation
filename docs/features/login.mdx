@@ -1,0 +1,112 @@
+---
+title: User Login
+description: How to implement user login with Protekt.
+---
+
+This guide explains how to implement user login in your application using Protekt. After successful registration, users can authenticate themselves to access protected resources.
+
+## Overview
+
+User login involves collecting the user's credentials (email and password) and sending them to Protekt's `/auth/login` endpoint. Upon successful authentication, Protekt returns an `access_token` which your application will use for subsequent authenticated API calls.
+
+## Endpoint
+
+`POST /auth/login`
+
+## Request Body
+
+```json
+{
+  "email": "user@example.com",
+  "password": "MyStrongPassword123!"
+}
+```
+
+## Request Example
+
+Below is an example of how to login a user. Make sure to replace the `email` and `password` with the user's email and password.
+
+<CodeGroup>
+```python Python
+import requests
+
+def login_user(email, password):
+    try:
+    url = "https://api.protekt.com/v1/auth/login"
+    headers = {"Content-Type": "application/json"}
+    data = {"email": email, "password": password}
+        response = requests.post(url, json=data)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.HTTPError as err:
+        print("Login failed:", err.response.json())
+```
+
+```javascript JavaScript
+async function handleLogin(email, password) {
+    try {
+        const response = await fetch("https://api.protekt.com/v1/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Login failed");
+        }
+
+        const data = await response.json();
+        localStorage.setItem("protekt_access_token", data.access_token);
+        console.log("Login successful:", data);
+        // Redirect user to dashboard or protected content
+    } catch (error) {
+        console.error("Login error:", error.message);
+        // Display error message to user
+    }
+}
+```
+</CodeGroup>
+
+After creating the function, you can call it with the user's email and password.
+
+<CodeGroup>
+```python Python
+# Example Usage:
+try:
+    login_response = login_user("test@example.com", "SecurePassword123!")
+    print("Login successful:", login_response)
+    access_token = login_response["access_token"]
+except requests.exceptions.HTTPError as err:
+    print("Login failed:", err.response.json())
+```
+
+```javascript JavaScript
+// Example Usage:
+try {
+    const response = await handleLogin("user@example.com", "YourSecurePassword!");
+    console.log("Login successful:", response);
+    localStorage.setItem("protekt_access_token", response.access_token);
+} catch (error) {
+    console.error("Login error:", error.message);
+}
+```
+</CodeGroup>
+
+## Handling the Access Token
+
+Upon successful login, Protekt returns a JSON Web Token (JWT) as an `access_token`. This token should be:
+
+*   **Securely Stored**: For web applications, `localStorage` or `sessionStorage` can be used, though more secure methods like HTTP-only cookies are recommended. For mobile applications, use secure storage mechanisms provided by the platform.
+*   **Sent with Authenticated Requests**: Include the `access_token` in the `Authorization` header of subsequent API requests to access protected resources (e.g., `Authorization: Bearer <access_token>`).
+
+## Error Handling
+
+Common errors during login include:
+
+*   `401 Unauthorized`: Invalid email or password.
+*   `403 Forbidden`: Account locked or requires MFA (if MFA is enabled).
+
+Your application should handle these errors gracefully and provide appropriate feedback to the user.

@@ -1,0 +1,166 @@
+---
+title: Quickstart Guide
+description: Get started with Protekt in minutes.
+---
+
+This guide will walk you through the essential steps to integrate Protekt into your application. By the end of this tutorial, you'll have a basic authentication flow working.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+*   A Protekt account (sign up at [protekt.com](https://protekt.com))
+*   A registered application in your Protekt dashboard to obtain your API keys.
+*   Basic knowledge of your chosen programming language (e.g., Python, JavaScript) and how to make HTTP requests.
+
+## Step 1: Obtain Your API Keys
+
+After registering your application in the Protekt dashboard, you'll be provided with a **Client ID** and a **Client Secret**. These keys are crucial for authenticating your application with Protekt. Keep your Client Secret secure and never expose it in client-side code.
+
+<Tip>**Pro Tip:** Use environment variables to store sensitive information.</Tip>
+
+## Step 2: Implement User Registration
+
+To allow users to sign up for your application, you'll use Protekt's user registration endpoint. This involves sending a `POST` request to `/auth/register` with the user's email and password.
+
+### Request Example
+
+Below is an example of how to register a user.
+<CodeGroup>
+```python Python
+import requests
+
+def register_user(email, password):
+    url = "https://api.protekt.com/v1/auth/register"
+    headers = {"Content-Type": "application/json"}
+    data = {"email": email, "password": password, "confirm_password": password}
+    response = requests.post(url, json=data)
+    response.raise_for_status() # Raise an exception for HTTP errors
+    return response.json()
+
+# Example Usage:
+# try:
+#     registration_response = register_user("test@example.com", "SecurePassword123!")
+#     print("Registration successful:", registration_response)
+# except requests.exceptions.HTTPError as err:
+#     print("Registration failed:", err.response.json())
+```
+
+```javascript JavaScript
+async function registerUser(email, password) {
+    try {
+        const response = await fetch("https://api.protekt.com/v1/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password, confirm_password: password })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Registration failed");
+        }
+
+        const data = await response.json();
+        console.log("Registration successful:", data);
+        return data;
+    } catch (error) {
+        console.error("Registration error:", error.message);
+        throw error;
+    }
+}
+
+// Example Usage:
+// registerUser("newuser@example.com", "MyStrongPassword123!");
+```
+</CodeGroup>
+
+After creating the function, you can call it with the user's email and password.
+
+<CodeGroup>
+```python Python
+# Example Usage:
+try:
+    registration_response = register_user("test@example.com", "SecurePassword123!")
+    print("Registration successful:", registration_response)
+except requests.exceptions.HTTPError as err:
+    print("Registration failed:", err.response.json())
+```
+
+```javascript JavaScript
+// Example Usage:
+registerUser("newuser@example.com", "MyStrongPassword123!");
+```
+</CodeGroup>
+
+### 3. Verify Email (Optional)
+
+Depending on your Protekt configuration, users might need to verify their email address after registration. Protekt will send a verification email with a link. Your application should guide the user to click this link.
+
+### 4. Implement User Login
+
+Once registered, users can log in using their credentials. The `/auth/login` endpoint will return an `access_token` upon successful authentication. This token should be securely stored (e.g., in `localStorage` or `sessionStorage` for web applications, or secure storage for mobile apps) and used for subsequent authenticated API calls.
+
+### Request Example
+
+<CodeGroup>
+```python Python
+import requests
+
+def login_user(email, password):
+    url = "https://api.protekt.com/v1/auth/login"
+    headers = {"Content-Type": "application/json"}
+    data = {"email": email, "password": password}
+    response = requests.post(url, json=data)
+    response.raise_for_status()
+    return response.json()
+
+# Example Usage:
+# try:
+#     login_response = login_user("test@example.com", "SecurePassword123!")
+#     print("Login successful:", login_response)
+#     access_token = login_response["access_token"]
+# except requests.exceptions.HTTPError as err:
+#     print("Login failed:", err.response.json())
+```
+
+```javascript JavaScript
+async function handleLogin(email, password) {
+    try {
+        const response = await fetch("https://api.protekt.com/v1/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Login failed");
+        }
+
+        const data = await response.json();
+        localStorage.setItem("protekt_access_token", data.access_token);
+        console.log("Login successful:", data);
+        // Redirect user to dashboard or protected content
+    } catch (error) {
+        console.error("Login error:", error.message);
+        // Display error message to user
+    }
+}
+
+// Example Usage:
+// handleLogin("user@example.com", "YourSecurePassword!");
+```
+</CodeGroup>
+
+## Next Steps
+
+Congratulations! You've successfully integrated basic user registration and login with Protekt. Now you can explore more advanced features:
+
+*   [Implementing Multi-Factor Authentication](/features/multi-factor-authentication) (TBA)
+*   [Adding Social Logins](/features/social-logins) (TBA)
+*   [Managing User Profiles](/features/user-management) (TBA)
+
