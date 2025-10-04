@@ -1,43 +1,48 @@
-# Mintlify Starter Kit
+# Protekt Auth Documentation
 
-Use the starter kit to get your docs deployed and ready to customize.
+The official documentation for Protekt, an Authentication as a Service (Auth-as-a-Service) platform designed to simplify and secure user authentication for your applications.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+## What's Included
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+- **Getting Started Guide** - Quick integration steps for developers
+- **Feature Documentation** - Comprehensive guides for authentication features
+- **API Reference** - Complete OpenAPI specification for all endpoints
+- **Code Examples** - Real-world implementation examples
+- **Security Best Practices** - Guidelines for secure authentication implementation
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+**[Get started with our quickstart guide](/getting-started/quickstart)**
 
 ## Development
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
+This documentation is built with [Mintlify](https://mintlify.com), a modern documentation platform. To preview your documentation changes locally, install the Mintlify CLI:
 
-```
+```bash
 npm i -g mint
 ```
 
 Run the following command at the root of your documentation, where your `docs.json` is located:
 
-```
+```bash
 mint dev
 ```
 
 View your local preview at `http://localhost:3000`.
 
-## Publishing changes
+## Publishing Changes
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+Documentation changes are automatically deployed when you push to the main branch. The site is hosted on Mintlify and updates in real-time.
 
-## Need help?
+## Contributing
 
-### Troubleshooting
+To contribute to this documentation:
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+1. Make your changes to the relevant `.mdx` files in the `docs/` directory
+2. Test your changes locally using `mint dev`
+3. Commit and push your changes to the main branch
+4. The changes will be automatically deployed
 
 ### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+
+- [Mintlify Documentation](https://mintlify.com/docs) - Platform documentation
+- [Protekt Support](mailto:support@protekt.com) - Get help with Protekt integration
+- [Protekt Dashboard](https://dashboard.protekt.com) - Manage your Protekt account
